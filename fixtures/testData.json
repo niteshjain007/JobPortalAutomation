@@ -1,0 +1,10 @@
+{
+  "jobTitles": {
+    "valid": ["Qa engineer", "Performance test engineer"],
+    "invalid": ["Chef", "ABDC@456"]
+  },
+  "cities": {
+    "valid": ["Pune", "Chennai"],
+    "invalid": ["traumaatic", "PNL@456"]
+  }
+}
