@@ -1,0 +1,116 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job">
+  <description>JobPortalAutomation Playwright pipeline: install, execute, report, email</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>RECIPIENT_EMAIL</name>
+          <description>Email address for build notifications</description>
+          <defaultValue>nitesh.iiitm@gmail.com</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps">
+    <script><![CDATA[
+pipeline {
+  agent any
+
+  options {
+    timestamps()
+    buildDiscarder(logRotator(numToKeepStr: '20'))
+    disableConcurrentBuilds()
+  }
+
+  environment {
+    CI = 'true'
+    PROJECT_DIR = 'C:\\Users\\ADMIN\\Documents\\JobPortalAutomation'
+    PLAYWRIGHT_BROWSERS_PATH = "${WORKSPACE}\\.pw-browsers"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        bat """
+          robocopy "%PROJECT_DIR%" "%WORKSPACE%" /E /XD node_modules .git playwright-report test-results .pw-browsers /NFL /NDL /NJH /NJS /nc /ns /np
+          if %ERRORLEVEL% GEQ 8 exit /b 1
+          exit /b 0
+        """
+      }
+    }
+
+    stage('Install') {
+      steps {
+        bat 'node -v'
+        bat 'call npm -v'
+        bat 'call npm ci'
+        bat 'call npx playwright install chromium'
+      }
+    }
+
+    stage('Execute') {
+      steps {
+        bat 'call npx playwright test'
+      }
+      post {
+        always {
+          junit allowEmptyResults: true, testResults: 'test-results/results.xml'
+        }
+      }
+    }
+
+    stage('Generate Report') {
+      steps {
+        bat '''
+          if not exist playwright-report\\index.html (
+            echo Playwright HTML report was not generated.
+            exit /b 1
+          )
+          echo Playwright HTML report available at playwright-report\\index.html
+        '''
+      }
+      post {
+        always {
+          archiveArtifacts artifacts: 'playwright-report/**/*,test-results/**/*', fingerprint: true, allowEmptyArchive: true
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      script {
+        def status = currentBuild.currentResult ?: 'SUCCESS'
+        def subject = "[Jenkins] JobPortalAutomation #${env.BUILD_NUMBER} - ${status}"
+        def recipient = params.RECIPIENT_EMAIL ?: 'nitesh.iiitm@gmail.com'
+        def body = "Project: JobPortalAutomation\nStatus: ${status}\nBuild: #${env.BUILD_NUMBER}\nURL: ${env.BUILD_URL}\nArtifacts: ${env.BUILD_URL}artifact/"
+        try {
+          emailext(
+            subject: subject,
+            body: body,
+            mimeType: 'text/plain',
+            to: recipient,
+            attachLog: true,
+            attachmentsPattern: 'playwright-report/index.html'
+          )
+        } catch (err) {
+          echo "emailext failed (${err}). Falling back to mail step."
+          try {
+            mail to: recipient, subject: subject, body: body
+          } catch (mailErr) {
+            echo "mail step also failed (${mailErr}). Configure SMTP under Manage Jenkins -> System."
+          }
+        }
+      }
+    }
+  }
+}
+]]></script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

@@ -6,3 +6,8 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Jenkins transient artifacts (session cookies, logs, deployed config dumps)
+/jenkins/cookies.txt
+/jenkins/build1-console.txt
+/jenkins/deployed-config.xml
