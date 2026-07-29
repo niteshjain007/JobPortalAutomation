@@ -1,0 +1,44 @@
+testID,testCaseName,Description,Test Steps,Expected result
+TC-CITY-001,Verify Location field is visible on Job Seeker profile,Job seeker can see the Location (city) field on the profile page after login.,"1. Login as Job Seeker with valid credentials
+2. Navigate to Profile page (/profile)
+3. Observe the Location field",Profile page opens; Location field (input-location) is visible and editable.
+TC-CITY-002,Update city to Mumbai and persist after refresh,Job seeker updates Location to Mumbai (allowed city) and verifies persistence after refresh.,"1. Login as Job Seeker
+2. Open Profile page
+3. Enter city: Mumbai in Location field
+4. Click Save profile
+5. Verify success message
+6. Refresh the page
+7. Check Location field value",Profile saved toast is shown; after refresh Location shows Mumbai.
+TC-CITY-003,Update city to Pune and persist after refresh,Job seeker updates Location to Pune (allowed city) and verifies persistence after refresh.,"1. Login as Job Seeker
+2. Open Profile page
+3. Enter city: Pune in Location field
+4. Click Save profile
+5. Verify success message
+6. Refresh the page
+7. Check Location field value",Profile saved toast is shown; after refresh Location shows Pune.
+TC-CITY-004,Switch city between Mumbai and Pune,Job seeker changes city from one allowed value to the other and verifies the new value persists.,"1. Login as Job Seeker
+2. Open Profile page
+3. Note current city (Mumbai or Pune); if neither set to Mumbai first and save
+4. Set Location to the other allowed city (Pune if Mumbai else Mumbai)
+5. Click Save profile
+6. Refresh the page",Profile saved; after refresh Location shows the newly selected allowed city only.
+TC-CITY-005,Empty city can be saved (optional field),Negative/edge: clearing Location and saving should follow app behavior for optional city.,"1. Login as Job Seeker
+2. Open Profile page
+3. Clear Location field
+4. Click Save profile
+5. Refresh the page",Profile saved toast is shown; after refresh Location remains empty (field optional).
+TC-CITY-006,Whitespace-only city treated as empty,Boundary: spaces-only Location value is saved as empty.,"1. Login as Job Seeker
+2. Open Profile page
+3. Enter spaces only in Location
+4. Click Save profile
+5. Check Location value",Profile saves; Location shows empty (whitespace trimmed or treated as empty).
+TC-CITY-007,Case variation Mumbai still saves,Boundary: enter mumbai in different casing and verify accepted display after save/refresh.,"1. Login as Job Seeker
+2. Open Profile page
+3. Enter mumbai (lowercase) in Location
+4. Click Save profile
+5. Refresh and read Location",Profile saved; value persists as entered (or normalized per app) after refresh.
+TC-CITY-008,Case variation Pune still saves,Boundary: enter PUNE in uppercase and verify accepted after save/refresh.,"1. Login as Job Seeker
+2. Open Profile page
+3. Enter PUNE in Location
+4. Click Save profile
+5. Refresh and read Location",Profile saved; value persists as entered (or normalized) after refresh.

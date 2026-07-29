@@ -1,3 +1,4 @@
+import { step } from 'allure-js-commons';
 import { test } from '../fixtures/baseFixture';
 import { JobSearchPage } from '../pages/JobSearchPage';
 
@@ -6,13 +7,18 @@ test.describe('Job Search Page', () => {
     const jobSearchPage = new JobSearchPage(page);
     const jobTitle = testData.jobTitles.valid[1];
 
-    // Navigate to Jobs, search by title, and confirm the expected role appears
-    await jobSearchPage.navigateToJobsPage();
-    await page.waitForTimeout(5000);
+    await step('Navigate to the Jobs page from the portal', async () => {
+      await jobSearchPage.navigateToJobsPage();
+      await page.waitForTimeout(5000);
+    });
 
-    await jobSearchPage.searchByTitle(jobTitle);
-    await page.waitForTimeout(5000);
+    await step(`Search for jobs using title "${jobTitle}"`, async () => {
+      await jobSearchPage.searchByTitle(jobTitle);
+      await page.waitForTimeout(5000);
+    });
 
-    await jobSearchPage.verifyJobPresentInList('Performance Test Engineer');
+    await step('Verify "Performance Test Engineer" appears in the job results', async () => {
+      await jobSearchPage.verifyJobPresentInList('Performance Test Engineer');
+    });
   });
 });

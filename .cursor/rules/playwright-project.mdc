@@ -1,0 +1,17 @@
+---
+description: Playwright + TypeScript project conventions for this Job Portal automation repo
+globs: "{pages,tests,fixtures,utils}/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Playwright Project Conventions
+
+- Use Playwright + TypeScript and the Page Object Model.
+- Reuse existing page objects, locators, fixtures, and helpers before adding new ones.
+- Never duplicate locators or create duplicate page objects.
+- Search the project first (`pages/`, `tests/`, `fixtures/`, `utils/`) before generating code.
+- Follow existing folder structure and naming patterns.
+- Assertions must use Playwright `expect()`.
+- Prefer reusable helpers (for example `CommonUtils`) over copy-pasted waits or utilities.
+- Prefer `getByRole()`, `getByLabel()`, `getByPlaceholder()`, `getByText()`, then `getByTestId()`.
+- Avoid XPath, `nth-child`, and long CSS chains unless no better locator exists.

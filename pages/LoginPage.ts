@@ -34,15 +34,45 @@ export class LoginPage {
     await expect(this.page).toHaveURL(/login/);
   }
 
-  /** Fills email and password, then clicks Sign in. */
+  /** Fills email and password, then clicks Sign in. Skips fill for empty values (avoids hang on password). */
   async login(email: string, password: string) {
-    await this.emailInput.fill(email);
-    await this.passwordInput.fill(password);
+    if (email.length > 0) {
+      await this.emailInput.fill(email);
+    }
+    if (password.length > 0) {
+      await this.passwordInput.fill(password);
+    }
     await this.signInButton.click();
   }
 
   /** Verifies the "Invalid credentials" error message is displayed. */
   async verifyInvalidCredentialsError() {
     await expect(this.invalidCredentialsError).toBeVisible();
+  }
+
+  /** Verifies HTML5 required-field validation on the email input. */
+  async verifyRequiredEmailMessage() {
+    await expect(this.emailInput).toHaveJSProperty(
+      'validationMessage',
+      'Please fill out this field.',
+    );
+  }
+
+  /** Verifies HTML5 required-field validation on the password input. */
+  async verifyRequiredPasswordMessage() {
+    await expect(this.passwordInput).toHaveJSProperty(
+      'validationMessage',
+      'Please fill out this field.',
+    );
+  }
+
+  /** Submits the login form without filling fields (for empty-field cases). */
+  async clickSignIn() {
+    await this.signInButton.click();
+  }
+
+  /** Verifies the user remains on the login page (no Dashboard redirect). */
+  async verifyStillOnLoginPage() {
+    await expect(this.page).toHaveURL(/login/);
   }
 }

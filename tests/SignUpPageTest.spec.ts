@@ -1,4 +1,5 @@
 import { test } from '@playwright/test';
+import { step } from 'allure-js-commons';
 import { SignUpPage } from '../pages/SignUpPage';
 
 test.describe('Sign Up Page', () => {
@@ -7,16 +8,23 @@ test.describe('Sign Up Page', () => {
   }) => {
     const signUpPage = new SignUpPage(page);
 
-    // Open signup via Get started, submit empty form, and assert validation
-    await signUpPage.navigateToSignUpPage();
-    await page.waitForTimeout(5000);
+    await step('Click Get started on the home page to open Sign Up', async () => {
+      await signUpPage.navigateToSignUpPage();
+      await page.waitForTimeout(5000);
+    });
 
-    await signUpPage.verifySignUpUrl();
-    await page.waitForTimeout(5000);
+    await step('Verify the user is on the Sign Up page', async () => {
+      await signUpPage.verifySignUpUrl();
+      await page.waitForTimeout(5000);
+    });
 
-    await signUpPage.clickCreateAccount();
-    await page.waitForTimeout(5000);
+    await step('Click Create account without entering name, email, or password', async () => {
+      await signUpPage.clickCreateAccount();
+      await page.waitForTimeout(5000);
+    });
 
-    await signUpPage.verifyRequiredFieldMessage();
+    await step('Verify "Please fill out this field" validation message is shown', async () => {
+      await signUpPage.verifyRequiredFieldMessage();
+    });
   });
 });
