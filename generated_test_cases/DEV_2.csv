@@ -1,0 +1,19 @@
+Issue Id,Test Type,Test Summary,Test Priority,Action,Data,Expected Result,Labels,Description
+1,Manual,DEV-2 | Filter jobs by location Mumbai,High,Login as Job Seeker with valid credentials,Email: Jobseeker2807@yopmail.com / Password: Test@123,User lands on Dashboard,DEV-2;positive;location,"AC1: Job seeker can filter jobs by location. Precondition: registered Job Seeker."
+1,Manual,DEV-2 | Filter jobs by location Mumbai,High,Navigate to Jobs page,,Jobs listing page is displayed,DEV-2;positive;location,AC1 location filter
+1,Manual,DEV-2 | Filter jobs by location Mumbai,High,Enter location filter / search for Mumbai,Mumbai,Search/filter is submitted,DEV-2;positive;location,AC1 location filter
+1,Manual,DEV-2 | Filter jobs by location Mumbai,High,Verify job results for Mumbai,,Jobs related to Mumbai location are shown (or empty state if none). No unrelated-location-only jobs dominate the list,DEV-2;positive;location,AC1 location filter
+2,Manual,DEV-2 | Filter jobs by location with invalid city,Medium,Login as Job Seeker and open Jobs page,,Jobs page opens,DEV-2;negative;location,AC1 negative: invalid location
+2,Manual,DEV-2 | Filter jobs by location with invalid city,Medium,Enter invalid location and search,traumaatic,Search is submitted,DEV-2;negative;location,AC1 negative: invalid location
+2,Manual,DEV-2 | Filter jobs by location with invalid city,Medium,Observe results,,No matching jobs (empty list / no results message). App does not crash,DEV-2;negative;location,AC1 negative: invalid location
+3,Manual,DEV-2 | Empty location filter shows default job list,Medium,Login as Job Seeker and open Jobs page,,Jobs page opens with default listing,DEV-2;boundary;location,AC1 boundary: empty filter
+3,Manual,DEV-2 | Empty location filter shows default job list,Medium,Clear location/search field and search,(empty),Default or unfiltered job list is shown,DEV-2;boundary;location,AC1 boundary: empty filter
+4,Manual,DEV-2 | Apply to a job from Mumbai filtered results,High,Login as Job Seeker with valid credentials,Email: Jobseeker2807@yopmail.com / Password: Test@123,Dashboard opens,DEV-2;positive;apply,"AC2: User can apply for a job. Precondition: Job Seeker logged in."
+4,Manual,DEV-2 | Apply to a job from Mumbai filtered results,High,Open Jobs and filter by Mumbai,Mumbai,Mumbai-related jobs displayed,DEV-2;positive;apply,AC2 apply job
+4,Manual,DEV-2 | Apply to a job from Mumbai filtered results,High,Open a Mumbai job from the results,,Job details page opens showing location Mumbai,DEV-2;positive;apply,AC2 apply job
+4,Manual,DEV-2 | Apply to a job from Mumbai filtered results,High,Click Apply now,,Fit-analysis nudge dialog appears,DEV-2;positive;apply,AC2 apply job
+4,Manual,DEV-2 | Apply to a job from Mumbai filtered results,High,Click Skip & apply directly,,Resume choice dialog opens,DEV-2;positive;apply,AC2 apply job
+4,Manual,DEV-2 | Apply to a job from Mumbai filtered results,High,Upload a resume for this job and Submit application,PDF/DOC/DOCX resume file,Toast "Application submitted!" and Apply button shows Applied,DEV-2;positive;apply,AC2 apply job
+5,Manual,DEV-2 | Apply requires authenticated Job Seeker,High,Open Jobs as guest and open a Mumbai job,,Job details visible without login,DEV-2;negative;apply,AC2 negative: unauthenticated apply
+5,Manual,DEV-2 | Apply requires authenticated Job Seeker,High,Click Apply now,,Prompt to Sign in / Create tester profile is shown; application is not completed,DEV-2;negative;apply,AC2 negative: unauthenticated apply
+6,Manual,DEV-2 | Already applied job shows Applied state,Medium,Login as Job Seeker; open a Mumbai job already applied,,Job details Apply control shows Applied (cannot submit duplicate apply),DEV-2;boundary;apply,AC2 boundary: already applied state

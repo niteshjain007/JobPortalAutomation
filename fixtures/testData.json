@@ -4,7 +4,7 @@
     "invalid": ["Chef", "ABDC@456"]
   },
   "cities": {
-    "valid": ["Pune", "Chennai"],
+    "valid": ["Mumbai", "Pune", "Chennai"],
     "invalid": ["traumaatic", "PNL@456"]
   }
 }
