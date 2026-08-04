@@ -10,6 +10,7 @@ export class JobSearchPage {
   private readonly searchInput: Locator;
   private readonly searchButton: Locator;
   private readonly locationFilter: Locator;
+  private readonly jobTypeFilter: Locator;
   private readonly jobsList: Locator;
   private readonly jobsResultCount: Locator;
   private readonly jobsNavLink: Locator;
@@ -33,6 +34,8 @@ export class JobSearchPage {
     this.searchButton = page.getByTestId('jobs-search-btn');
     // Location filter (AC for DEV-2)
     this.locationFilter = page.getByTestId('filter-location');
+    // Job type select: Full-time / Contract / Part-time / Freelance (AC for DEV-3)
+    this.jobTypeFilter = page.getByTestId('filter-job-type');
     // Container holding the filtered job cards
     this.jobsList = page.getByTestId('jobs-list');
     this.jobsResultCount = page.getByTestId('jobs-result-count');
@@ -80,6 +83,31 @@ export class JobSearchPage {
   async clearLocationAndSearch() {
     await this.locationFilter.fill('');
     await this.searchButton.click();
+  }
+
+  /** Filters jobs by Job type (e.g. Freelance). Select updates results immediately. */
+  async filterByJobType(jobType: string) {
+    await this.jobTypeFilter.selectOption(jobType);
+  }
+
+  /** Resets Job type to "Any job type" (empty value). */
+  async clearJobTypeFilter() {
+    await this.jobTypeFilter.selectOption('');
+  }
+
+  /** Verifies job detail shows the expected job type (e.g. Freelance). */
+  async verifyJobDetailJobType(jobType: string) {
+    await expect(this.page.getByText(jobType, { exact: true }).first()).toBeVisible();
+  }
+
+  /**
+   * Verifies AC3 fit-analysis prompt on Apply ("Analysis your fit first").
+   * Uses stable test id; text matched flexibly for wording variants.
+   */
+  async verifyFitAnalysisPrompt() {
+    await this.applyJobButton.click();
+    await expect(this.applyNudgeDialog).toBeVisible();
+    await expect(this.applyNudgeDialog).toContainText(/analys(e|is).{0,20}fit|fit first/i);
   }
 
   /** Verifies that a job with the given title is present in the results list. */
@@ -142,6 +170,23 @@ export class JobSearchPage {
       resumeFilePath ?? path.join(process.cwd(), 'fixtures', 'sample-resume.pdf');
 
     await this.applyJobButton.click();
+    await expect(this.applyNudgeDialog).toBeVisible();
+    await this.skipAndApplyButton.click();
+    await expect(this.resumeChoiceDialog).toBeVisible();
+    await this.resumeChoiceNew.click();
+    await this.resumeFileInput.setInputFiles(filePath);
+    await expect(this.resumeSubmitButton).toBeEnabled();
+    await this.resumeSubmitButton.click();
+  }
+
+  /**
+   * Continues apply after fit-analysis nudge is already open
+   * (e.g. after verifyFitAnalysisPrompt): Skip → upload resume → Submit.
+   */
+  async completeApplyWithNewResumeFromNudge(resumeFilePath?: string) {
+    const filePath =
+      resumeFilePath ?? path.join(process.cwd(), 'fixtures', 'sample-resume.pdf');
+
     await expect(this.applyNudgeDialog).toBeVisible();
     await this.skipAndApplyButton.click();
     await expect(this.resumeChoiceDialog).toBeVisible();

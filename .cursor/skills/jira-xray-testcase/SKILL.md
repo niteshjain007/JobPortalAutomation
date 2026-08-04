@@ -1,7 +1,7 @@
 ---
 name: jira-xray-testcase
 description: >-
-  Fetch a Jira story/feature from a ticket URL using .env credentials, extract
+  Fetch a Jira story/feature from a ticket URL using .env credentials, extract description and
   acceptance criteria, generate positive/negative/boundary manual test cases in
   Xray-upload CSV format named after the ticket (e.g. DEV_2.csv), then create
   matching Playwright automation. Use when the user provides a Jira link, asks
@@ -35,7 +35,7 @@ Copy and track:
 ```
 Progress:
 - [ ] 1. Fetch Jira issue via REST API
-- [ ] 2. Extract summary, description, acceptance criteria
+- [ ] 2. Extract summary, description, acceptance criteria , status
 - [ ] 3. Write Xray CSV under generated_test_cases/
 - [ ] 4. Generate Playwright automation from those cases
 ```
