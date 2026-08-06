@@ -7,7 +7,7 @@ const VALID_EMAIL = 'Jobseeker2807@yopmail.com';
 const VALID_PASSWORD = 'Test@123';
 
 test.describe('Login Page', () => {
-  test('should navigate to login page from home Sign in button', async ({ page }) => {
+  test('should navigate to login page from home Sign in button', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await step('Click Sign in on the home page to open the login page', async () => {
@@ -20,7 +20,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-001 / TC-LOGIN-002
-  test('TC-LOGIN-001/002: valid job seeker login opens Dashboard', async ({ page }) => {
+  test('TC-LOGIN-001/002: valid job seeker login opens Dashboard', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
 
@@ -38,7 +38,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-003
-  test('TC-LOGIN-003: invalid password does not open Dashboard', async ({ page }) => {
+  test('TC-LOGIN-003: invalid password does not open Dashboard', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await step('Open the login page from the home page', async () => {
@@ -56,7 +56,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-004
-  test('TC-LOGIN-004: invalid email does not open Dashboard', async ({ page }) => {
+  test('TC-LOGIN-004: invalid email does not open Dashboard', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await step('Open the login page from the home page', async () => {
@@ -74,7 +74,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-005
-  test('TC-LOGIN-005: should show Invalid credentials for incorrect email and password', async ({
+  test('TC-LOGIN-005: should show Invalid credentials for incorrect email and password', { tag: '@regression' }, async ({
     page,
   }) => {
     const loginPage = new LoginPage(page);
@@ -94,7 +94,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-006
-  test('TC-LOGIN-006: empty email shows required-field validation', async ({ page }) => {
+  test('TC-LOGIN-006: empty email shows required-field validation', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await step('Open the login page from the home page', async () => {
@@ -112,7 +112,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-007
-  test('TC-LOGIN-007: empty password shows required-field validation', async ({ page }) => {
+  test('TC-LOGIN-007: empty password shows required-field validation', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await step('Open the login page from the home page', async () => {
@@ -130,7 +130,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-008
-  test('TC-LOGIN-008: both fields empty shows required-field validation', async ({ page }) => {
+  test('TC-LOGIN-008: both fields empty shows required-field validation', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await step('Open the login page from the home page', async () => {
@@ -148,7 +148,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-009
-  test('TC-LOGIN-009: whitespace-only credentials do not open Dashboard', async ({ page }) => {
+  test('TC-LOGIN-009: whitespace-only credentials do not open Dashboard', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await step('Open the login page from the home page', async () => {
@@ -165,7 +165,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-010
-  test('TC-LOGIN-010: email with leading/trailing spaces', async ({ page }) => {
+  test('TC-LOGIN-010: email with leading/trailing spaces', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
 
@@ -188,7 +188,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-011
-  test('TC-LOGIN-011: password case sensitivity rejects wrong casing', async ({ page }) => {
+  test('TC-LOGIN-011: password case sensitivity rejects wrong casing', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await step('Open the login page from the home page', async () => {
@@ -206,7 +206,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-012
-  test('TC-LOGIN-012: email case variation still allows login when supported', async ({ page }) => {
+  test('TC-LOGIN-012: email case variation still allows login when supported', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
 
@@ -224,7 +224,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-013
-  test('TC-LOGIN-013: logout then re-login opens Dashboard again', async ({ page }) => {
+  test('TC-LOGIN-013: logout then re-login opens Dashboard again', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
 
@@ -246,7 +246,7 @@ test.describe('Login Page', () => {
   });
 
   // TC-LOGIN-014
-  test('TC-LOGIN-014: malicious input does not open Dashboard', async ({ page }) => {
+  test('TC-LOGIN-014: malicious input does not open Dashboard', { tag: '@regression' }, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await step('Open the login page from the home page', async () => {

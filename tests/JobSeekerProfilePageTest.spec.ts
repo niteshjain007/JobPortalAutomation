@@ -26,7 +26,7 @@ test.describe('Job Seeker Profile Page — Update India phone', () => {
   test.describe.configure({ mode: 'serial' });
 
   // TC-PROFILE-001
-  test('TC-PROFILE-001: profile page opens for authenticated job seeker', async ({ page }) => {
+  test('TC-PROFILE-001: profile page opens for authenticated job seeker', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
 
     await step('Log in as job seeker', async () => {
@@ -43,7 +43,7 @@ test.describe('Job Seeker Profile Page — Update India phone', () => {
   });
 
   // TC-PROFILE-002
-  test('TC-PROFILE-002: update India phone and see value after refresh', async ({ page }) => {
+  test('TC-PROFILE-002: update India phone and see value after refresh', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
     const newPhone = randomIndiaPhone();
 
@@ -69,7 +69,7 @@ test.describe('Job Seeker Profile Page — Update India phone', () => {
   });
 
   // TC-PROFILE-003
-  test('TC-PROFILE-003: empty phone is optional and can be saved', async ({ page }) => {
+  test('TC-PROFILE-003: empty phone is optional and can be saved', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
 
     await step('Log in as job seeker and open profile', async () => {
@@ -92,7 +92,7 @@ test.describe('Job Seeker Profile Page — Update India phone', () => {
   });
 
   // TC-PROFILE-004
-  test('TC-PROFILE-004: phone shorter than 10 digits is rejected', async ({ page }) => {
+  test('TC-PROFILE-004: phone shorter than 10 digits is rejected', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
 
     await step('Log in as job seeker and open profile', async () => {
@@ -110,7 +110,7 @@ test.describe('Job Seeker Profile Page — Update India phone', () => {
   });
 
   // TC-PROFILE-005
-  test('TC-PROFILE-005: input maxlength blocks more than 10 digits', async ({ page }) => {
+  test('TC-PROFILE-005: input maxlength blocks more than 10 digits', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
     const elevenDigits = '98765432101';
     const truncatedTen = elevenDigits.slice(0, 10);
@@ -131,7 +131,7 @@ test.describe('Job Seeker Profile Page — Update India phone', () => {
   });
 
   // TC-PROFILE-006
-  test('TC-PROFILE-006: non-numeric characters are not accepted in phone field', async ({
+  test('TC-PROFILE-006: non-numeric characters are not accepted in phone field', { tag: '@regression' }, async ({
     page,
   }) => {
     const profilePage = new JobSeekerProfilePage(page);
@@ -152,7 +152,7 @@ test.describe('Job Seeker Profile Page — Update India phone', () => {
   });
 
   // TC-PROFILE-007
-  test('TC-PROFILE-007: special characters are stripped from phone field', async ({ page }) => {
+  test('TC-PROFILE-007: special characters are stripped from phone field', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
 
     await step('Log in as job seeker and open profile', async () => {
@@ -171,7 +171,7 @@ test.describe('Job Seeker Profile Page — Update India phone', () => {
   });
 
   // TC-PROFILE-008
-  test('TC-PROFILE-008: whitespace-only phone is treated as empty and can be saved', async ({
+  test('TC-PROFILE-008: whitespace-only phone is treated as empty and can be saved', { tag: '@regression' }, async ({
     page,
   }) => {
     const profilePage = new JobSeekerProfilePage(page);
@@ -192,7 +192,7 @@ test.describe('Job Seeker Profile Page — Update India phone', () => {
   });
 
   // TC-PROFILE-009
-  test('TC-PROFILE-009: boundary — exactly 10 digits is accepted and persists', async ({
+  test('TC-PROFILE-009: boundary — exactly 10 digits is accepted and persists', { tag: '@regression' }, async ({
     page,
   }) => {
     const profilePage = new JobSeekerProfilePage(page);
@@ -214,7 +214,7 @@ test.describe('Job Seeker Profile Page — Update India phone', () => {
   });
 
   // TC-PROFILE-010
-  test('TC-PROFILE-010: invalid phone is not persisted after refresh', async ({ page }) => {
+  test('TC-PROFILE-010: invalid phone is not persisted after refresh', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
     const validPhone = randomIndiaPhone();
     const invalidPhone = '123';
@@ -242,7 +242,7 @@ test.describe('Job Seeker Profile Page — Edit city (Mumbai / Pune)', () => {
   test.describe.configure({ mode: 'serial' });
 
   // TC-CITY-001
-  test('TC-CITY-001: Location field is visible on profile page', async ({ page }) => {
+  test('TC-CITY-001: Location field is visible on profile page', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
 
     await step('Log in as job seeker and open profile', async () => {
@@ -256,7 +256,7 @@ test.describe('Job Seeker Profile Page — Edit city (Mumbai / Pune)', () => {
   });
 
   // TC-CITY-002
-  test('TC-CITY-002: update city to Mumbai and see value after refresh', async ({ page }) => {
+  test('TC-CITY-002: update city to Mumbai and see value after refresh', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
     const city = 'Mumbai';
 
@@ -277,7 +277,7 @@ test.describe('Job Seeker Profile Page — Edit city (Mumbai / Pune)', () => {
   });
 
   // TC-CITY-003
-  test('TC-CITY-003: update city to Pune and see value after refresh', async ({ page }) => {
+  test('TC-CITY-003: update city to Pune and see value after refresh', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
     const city = 'Pune';
 
@@ -298,7 +298,7 @@ test.describe('Job Seeker Profile Page — Edit city (Mumbai / Pune)', () => {
   });
 
   // TC-CITY-004
-  test('TC-CITY-004: switch city between Mumbai and Pune', async ({ page }) => {
+  test('TC-CITY-004: switch city between Mumbai and Pune', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
 
     await step('Log in as job seeker and open profile', async () => {
@@ -321,7 +321,7 @@ test.describe('Job Seeker Profile Page — Edit city (Mumbai / Pune)', () => {
   });
 
   // TC-CITY-005
-  test('TC-CITY-005: empty city is optional and can be saved', async ({ page }) => {
+  test('TC-CITY-005: empty city is optional and can be saved', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
 
     await step('Log in as job seeker and open profile', async () => {
@@ -341,7 +341,7 @@ test.describe('Job Seeker Profile Page — Edit city (Mumbai / Pune)', () => {
   });
 
   // TC-CITY-006
-  test('TC-CITY-006: whitespace-only city is treated as empty', async ({ page }) => {
+  test('TC-CITY-006: whitespace-only city is treated as empty', { tag: '@regression' }, async ({ page }) => {
     const profilePage = new JobSeekerProfilePage(page);
 
     await step('Log in as job seeker and open profile', async () => {

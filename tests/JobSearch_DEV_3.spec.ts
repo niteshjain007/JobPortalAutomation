@@ -23,7 +23,7 @@ test.describe('DEV-3 | Search and apply for Freelance job', () => {
   test.describe.configure({ mode: 'serial' });
 
   // Xray Issue Id 1 — positive job type filter
-  test('DEV-3 TC1: filter jobs by Job type Freelance', async ({ page }) => {
+  test('DEV-3 TC1: filter jobs by Job type Freelance', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Login as Job Seeker', async () => {
@@ -51,7 +51,7 @@ test.describe('DEV-3 | Search and apply for Freelance job', () => {
   });
 
   // Xray Issue Id 2 — negative wrong job type
-  test('DEV-3 TC2: Full-time filter excludes Freelance job', async ({ page }) => {
+  test('DEV-3 TC2: Full-time filter excludes Freelance job', { tag: '@regression' }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Login as Job Seeker and open Jobs', async () => {
@@ -75,7 +75,7 @@ test.describe('DEV-3 | Search and apply for Freelance job', () => {
   });
 
   // Xray Issue Id 3 — boundary reset job type
-  test('DEV-3 TC3: reset Job type to Any shows default list', async ({ page }) => {
+  test('DEV-3 TC3: reset Job type to Any shows default list', { tag: '@regression' }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Login as Job Seeker and open Jobs', async () => {
@@ -97,7 +97,7 @@ test.describe('DEV-3 | Search and apply for Freelance job', () => {
   });
 
   // Xray Issue Id 4 — positive apply + fit analysis (AC2 + AC3)
-  test('DEV-3 TC4: apply to Freelance job with fit-analysis prompt', async ({ page }) => {
+  test('DEV-3 TC4: apply to Freelance job with fit-analysis prompt', { tag: '@regression' }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Login, open Jobs, filter Freelance, open job', async () => {
@@ -120,7 +120,7 @@ test.describe('DEV-3 | Search and apply for Freelance job', () => {
   });
 
   // Xray Issue Id 5 — negative unauthenticated apply
-  test('DEV-3 TC5: guest apply on Freelance job prompts Sign in', async ({ page }) => {
+  test('DEV-3 TC5: guest apply on Freelance job prompts Sign in', { tag: '@regression' }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Open Jobs as guest and filter Freelance', async () => {
@@ -135,7 +135,7 @@ test.describe('DEV-3 | Search and apply for Freelance job', () => {
   });
 
   // Xray Issue Id 6 — boundary already applied
-  test('DEV-3 TC6: already applied Freelance job shows Applied state', async ({ page }) => {
+  test('DEV-3 TC6: already applied Freelance job shows Applied state', { tag: '@regression' }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Login and open Freelance job detail', async () => {

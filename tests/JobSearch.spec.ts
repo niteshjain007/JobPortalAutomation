@@ -3,7 +3,7 @@ import { test } from '../fixtures/baseFixture';
 import { JobSearchPage } from '../pages/JobSearchPage';
 
 test.describe('Job Search Page', () => {
-  test('should search jobs by title and show Performance Test Engineer', async ({ page, testData }) => {
+  test('should search jobs by title and show Performance Test Engineer', { tag: ['@smoke', '@regression'] }, async ({ page, testData }) => {
     const jobSearchPage = new JobSearchPage(page);
     const jobTitle = testData.jobTitles.valid[1];
 
