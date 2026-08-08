@@ -22,7 +22,7 @@ test.describe('DEV-2 | Job search in Mumbai + Apply', () => {
   test.describe.configure({ mode: 'serial' });
 
   // Xray Issue Id 1 — positive location filter
-  test('DEV-2 TC1: filter jobs by location Mumbai', async ({ page }) => {
+  test('DEV-2 TC1: filter jobs by location Mumbai', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Login as Job Seeker', async () => {
@@ -45,7 +45,7 @@ test.describe('DEV-2 | Job search in Mumbai + Apply', () => {
   });
 
   // Xray Issue Id 2 — negative invalid location
-  test('DEV-2 TC2: invalid location shows no matching jobs', async ({ page }) => {
+  test('DEV-2 TC2: invalid location shows no matching jobs', { tag: '@regression' }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Login as Job Seeker and open Jobs', async () => {
@@ -63,7 +63,7 @@ test.describe('DEV-2 | Job search in Mumbai + Apply', () => {
   });
 
   // Xray Issue Id 3 — boundary empty location
-  test('DEV-2 TC3: empty location shows default job list', async ({ page }) => {
+  test('DEV-2 TC3: empty location shows default job list', { tag: '@regression' }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Login as Job Seeker and open Jobs', async () => {
@@ -82,7 +82,7 @@ test.describe('DEV-2 | Job search in Mumbai + Apply', () => {
   });
 
   // Xray Issue Id 4 — positive apply
-  test('DEV-2 TC4: apply to a Mumbai job as Job Seeker', async ({ page }) => {
+  test('DEV-2 TC4: apply to a Mumbai job as Job Seeker', { tag: '@regression' }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Login, open Jobs, filter Mumbai', async () => {
@@ -104,7 +104,7 @@ test.describe('DEV-2 | Job search in Mumbai + Apply', () => {
   });
 
   // Xray Issue Id 5 — negative unauthenticated apply
-  test('DEV-2 TC5: guest apply prompts Sign in / create profile', async ({ page }) => {
+  test('DEV-2 TC5: guest apply prompts Sign in / create profile', { tag: '@regression' }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Open Jobs as guest and filter Mumbai', async () => {
@@ -119,7 +119,7 @@ test.describe('DEV-2 | Job search in Mumbai + Apply', () => {
   });
 
   // Xray Issue Id 6 — boundary already applied
-  test('DEV-2 TC6: already applied Mumbai job shows Applied state', async ({ page }) => {
+  test('DEV-2 TC6: already applied Mumbai job shows Applied state', { tag: '@regression' }, async ({ page }) => {
     const jobSearchPage = new JobSearchPage(page);
 
     await step('Login and open Mumbai job detail', async () => {

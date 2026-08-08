@@ -161,6 +161,46 @@ npx playwright test tests/JobSearch_DEV_2.spec.ts --headed
 npm run report
 ```
 
+### Smoke vs regression tags
+
+Every test is tagged `@regression`. The **first test in each spec file** is also tagged `@smoke` (quick health check suite).
+
+| Tag | Meaning |
+|-----|---------|
+| `@smoke` | First test case per file — critical path / sanity |
+| `@regression` | Full suite (includes smoke tests) |
+
+**Run smoke only** (fast subset — one test per file):
+
+```bash
+npm run test:smoke
+
+# Equivalent (quote the tag on Windows PowerShell):
+npx playwright test --grep "@smoke"
+
+# Headed:
+npx playwright test --grep "@smoke" --headed
+```
+
+**Run full regression** (all tagged tests):
+
+```bash
+npm run test:regression
+
+# Equivalent (quote the tag on Windows PowerShell):
+npx playwright test --grep "@regression"
+
+# Headed:
+npx playwright test --grep "@regression" --headed
+```
+
+**List matched tests without running:**
+
+```bash
+npx playwright test --grep "@smoke" --list
+npx playwright test --grep "@regression" --list
+```
+
 ### Allure report
 
 After a test run, raw results are written to `allure-results/`. Generate and open the Allure HTML report:
@@ -186,6 +226,10 @@ On GitHub Actions, Allure raw results and the generated HTML report are uploaded
 | `npx playwright install chromium` | Download Chromium for Playwright |
 | `npm test` | Run all tests headless |
 | `npm run test:headed` | Run all tests with browser visible |
+| `npm run test:smoke` | Run `@smoke` tests only (first test per file) |
+| `npm run test:regression` | Run all `@regression` tests (full suite) |
+| `npx playwright test --grep @smoke` | Same as `npm run test:smoke` |
+| `npx playwright test --grep @regression` | Same as `npm run test:regression` |
 | `npx playwright test tests/<file>.spec.ts` | Run a specific test file |
 | `npx playwright test tests/<file>.spec.ts --headed` | Run a specific file in headed mode |
 | `npx playwright test --debug` | Run tests in Playwright debug mode |

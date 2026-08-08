@@ -3,7 +3,7 @@ import { step } from 'allure-js-commons';
 import { HomePage } from '../pages/HomePage';
 
 test.describe('Home Page', () => {
-  test('should open the Job Search Portal website', async ({ page }) => {
+  test('should open the Job Search Portal website', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
     const homePage = new HomePage(page);
 
     await step('Open the Job Search Portal home page', async () => {

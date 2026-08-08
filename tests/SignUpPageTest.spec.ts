@@ -3,7 +3,7 @@ import { step } from 'allure-js-commons';
 import { SignUpPage } from '../pages/SignUpPage';
 
 test.describe('Sign Up Page', () => {
-  test('should show required field message when Create account is clicked with empty fields', async ({
+  test('should show required field message when Create account is clicked with empty fields', { tag: ['@smoke', '@regression'] }, async ({
     page,
   }) => {
     const signUpPage = new SignUpPage(page);
