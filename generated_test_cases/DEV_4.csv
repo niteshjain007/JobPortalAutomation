@@ -1,0 +1,11 @@
+Issue Id,Test Type,Test Summary,Test Priority,Action,Data,Expected Result,Labels,Description
+1,Manual,DEV-4 | Guest home shows Jobs About Contact nav links,High,Open QaTestology home page as unregistered guest,URL: https://qatestology.com/,Home page loads (QaTestology - Home),DEV-4;positive;navigation,"AC1: Unregistered user sees Jobs, About, Contact links. Precondition: guest / not logged in."
+1,Manual,DEV-4 | Guest home shows Jobs About Contact nav links,High,Verify Jobs navigation link is visible,,Jobs link is visible in the header navigation,DEV-4;positive;navigation,AC1 nav Jobs
+1,Manual,DEV-4 | Guest home shows Jobs About Contact nav links,High,Verify About navigation link is visible,,About link is visible in the header navigation,DEV-4;positive;navigation,AC1 nav About
+1,Manual,DEV-4 | Guest home shows Jobs About Contact nav links,High,Verify Contact navigation link is visible,,Contact link is visible in the header navigation,DEV-4;positive;navigation,AC1 nav Contact
+2,Manual,DEV-4 | Guest can open Jobs from home nav,High,Open home as guest,,Home page loads,DEV-4;positive;navigation,AC1 navigation to Jobs works
+2,Manual,DEV-4 | Guest can open Jobs from home nav,High,Click Jobs nav link,,User navigates to Jobs page (/jobs),DEV-4;positive;navigation,AC1 navigation to Jobs works
+3,Manual,DEV-4 | Guest can open About from home nav,Medium,Open home as guest and click About,,About page opens (/about),DEV-4;positive;navigation,AC1 navigation to About works
+4,Manual,DEV-4 | Guest can open Contact from home nav,Medium,Open home as guest and click Contact,,Contact page opens (/contact),DEV-4;positive;navigation,AC1 navigation to Contact works
+5,Manual,DEV-4 | Nav links remain visible when guest not signed in,Medium,Open home as guest without signing in,,Jobs About Contact links stay visible; Sign in / Get started remain available (guest state),DEV-4;boundary;navigation,AC1 boundary: guest session on home
+6,Manual,DEV-4 | Direct home URL shows nav for unregistered user,Medium,Open home via direct URL in a fresh/private session,https://qatestology.com/,Jobs About Contact nav links are visible without login,DEV-4;negative;navigation,"AC1 negative: access without registration still shows nav (no login required for links)"

@@ -12,6 +12,7 @@ export class JobSearchPage {
   private readonly locationFilter: Locator;
   private readonly jobTypeFilter: Locator;
   private readonly jobsList: Locator;
+  private readonly jobCards: Locator;
   private readonly jobsResultCount: Locator;
   private readonly jobsNavLink: Locator;
   private readonly noJobsMessage: Locator;
@@ -38,6 +39,8 @@ export class JobSearchPage {
     this.jobTypeFilter = page.getByTestId('filter-job-type');
     // Container holding the filtered job cards
     this.jobsList = page.getByTestId('jobs-list');
+    // Each card's test id is suffixed with the job id (job-card-job_<id>)
+    this.jobCards = page.locator('[data-testid^="job-card-"]');
     this.jobsResultCount = page.getByTestId('jobs-result-count');
     // Header navigation link to open the Jobs page
     this.jobsNavLink = page.getByTestId('nav-jobs');
@@ -93,6 +96,22 @@ export class JobSearchPage {
   /** Resets Job type to "Any job type" (empty value). */
   async clearJobTypeFilter() {
     await this.jobTypeFilter.selectOption('');
+  }
+
+  /** Verifies at least one job is listed and every listed card shows the given job type. */
+  async verifyAllListedJobsHaveType(jobType: string) {
+    await expect(this.jobCards.first()).toBeVisible();
+    await expect(this.jobCards.filter({ hasNotText: jobType })).toHaveCount(0);
+  }
+
+  /** Verifies no listed card shows the given job type. */
+  async verifyNoListedJobHasType(jobType: string) {
+    await expect(this.jobCards.filter({ hasText: jobType })).toHaveCount(0);
+  }
+
+  /** Verifies at least one listed card does not show the given job type (filter is cleared). */
+  async verifyJobsOfOtherTypesListed(jobType: string) {
+    await expect(this.jobCards.filter({ hasNotText: jobType }).first()).toBeVisible();
   }
 
   /** Verifies job detail shows the expected job type (e.g. Freelance). */
