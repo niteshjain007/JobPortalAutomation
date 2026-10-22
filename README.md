@@ -195,6 +195,7 @@ On GitHub Actions, Allure raw results and the generated HTML report are uploaded
 | `npm run allure:open` | Open the generated Allure report |
 | `npm run allure:serve` | Generate and serve Allure report in one step |
 | `npx tsc --noEmit` | Type-check the project |
+| `npm run jira:after-automation -- <KEY>` | Add test coverage to the Jira ticket and move it To Do -> In Review (`--dry-run` to preview) |
 
 ---
 
@@ -273,6 +274,18 @@ https://qatestologytest.atlassian.net/browse/DEV-2
 ```
 
 CSV is named from the ticket key: `DEV-2` → `generated_test_cases/DEV_2.csv`.
+
+Once the ticket's tests pass, the agent updates the Jira ticket. You can also run this yourself:
+
+```bash
+# Preview what will change in Jira
+npm run jira:after-automation -- SCRUM-5 --dry-run
+
+# Add test coverage to the description and move To Do -> In Review
+npm run jira:after-automation -- SCRUM-5
+```
+
+The ticket description gets an **Automated test coverage** section with the spec file name and every test case from the CSV: its type, priority, the acceptance criterion it covers, and a table of its steps (action, data, expected result). Re-running the command refreshes that section instead of adding a second copy. The status only changes when the ticket is in **To Do**.
 
 **4. Locator review**
 

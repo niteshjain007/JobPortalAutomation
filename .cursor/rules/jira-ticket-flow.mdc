@@ -1,0 +1,21 @@
+---
+description: End-to-end flow to run automatically whenever the user gives a Jira ticket link or key
+alwaysApply: true
+---
+
+# Jira ticket flow (no confirmation prompts)
+
+When the user's message contains a Jira ticket (a `.../browse/ABC-123` URL or a key like `SCRUM-5`) and asks for tests or automation, or gives the ticket on its own, run every step below in order. Do **not** ask for permission for branch creation, `git add`, `git commit`, `git push`, or the Jira update. Only stop to ask if a step fails in a way you cannot fix.
+
+1. **Branch**: `git fetch origin`, then `git checkout -b <KEY_with_underscore>_<short_summary_slug> origin/main` (example: `SCRUM_5_contractual_job_search`). If that branch exists, check it out instead.
+2. **Fetch + analyse**: fetch the ticket per `.cursor/skills/jira-xray-testcase/SKILL.md` (base URL from `.env`; add `https://` if missing). Analyse it per `.cursor/skills/requirement-analysis/SKILL.md`.
+3. **Test cases**: write `generated_test_cases/<KEY>.csv` (Xray format) per the jira-xray-testcase and testcase-generation skills. Always include positive, negative, and boundary cases.
+4. **Locators + automation**: inspect the live page for locators (`.cursor/skills/locator-review/SKILL.md`), then write `tests/<Feature>_<KEY>.spec.ts` per `.cursor/skills/playwright-automation/SKILL.md`, reusing page objects. Tag the first test `['@smoke', '@regression']` and every other test `'@regression'`.
+5. **Review**: self-review the new code per `.cursor/skills/code-review/SKILL.md` and fix issues found.
+6. **Run**: clear old Allure results (`Remove-Item -Recurse -Force allure-results -ErrorAction SilentlyContinue`), then `npx playwright test tests/<Feature>_<KEY>.spec.ts`. Fix test-code problems and re-run; do not weaken assertions to hide real app bugs.
+7. **Jira update** (only if all tests pass): `npm run jira:after-automation -- <KEY>`. This writes the test cases and steps into the ticket description and moves it To Do -> In Review. If tests fail, skip this and report the failures.
+8. **Git**: `git add` only the files for this ticket (never `.env`, `screenshots/`, reports), commit with message `Add <KEY> <summary> test cases and automation.`, and `git push -u origin <branch>`.
+9. **Pull request**: if `gh` is available, `gh pr create --base main --fill`. Otherwise give the user a pre-filled `https://github.com/<owner>/<repo>/compare/main...<branch>?expand=1&title=...&body=...` link.
+10. **Report**: summarise per `.cursor/skills/reporting/SKILL.md`, then run `npm run allure:generate` and open it with `npm run allure:open` (in the background, since it keeps a server running).
+
+Never print or commit the Jira API token.

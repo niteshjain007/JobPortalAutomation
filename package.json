@@ -7,6 +7,7 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "report": "playwright show-report",
+    "jira:after-automation": "node scripts/jiraUpdateAfterAutomation.js",
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
     "allure:serve": "allure serve allure-results"
