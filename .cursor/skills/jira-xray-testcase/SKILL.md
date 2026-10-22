@@ -38,6 +38,7 @@ Progress:
 - [ ] 2. Extract summary, description, acceptance criteria , status
 - [ ] 3. Write Xray CSV under generated_test_cases/
 - [ ] 4. Generate Playwright automation from those cases
+- [ ] 5. Run the spec; when it passes, update the Jira ticket (coverage in description, To Do -> In Review)
 ```
 
 ### Step 1 — Fetch ticket
@@ -100,6 +101,20 @@ Follow project Playwright + POM conventions (`.cursor/skills/playwright-automati
 4. Use `expect()`, Allure `step()` where the suite already does.
 5. Explain locator choices briefly in the response.
 
+### Step 5 — Update the Jira ticket (after automation passes)
+
+Only after the ticket's spec file has run and **all its tests pass**:
+
+1. Preview: `npm run jira:after-automation -- <KEY> --dry-run`
+2. Apply: `npm run jira:after-automation -- <KEY>`
+
+The script (`scripts/jiraUpdateAfterAutomation.js`):
+
+- Adds an **Automated test coverage** section to the end of the ticket description: total and positive / negative / boundary counts, the CSV path, and the spec file. Each test case then gets its own heading (`<KEY> TC<n>: <summary>`), a line with type, priority and the AC it covers, and a steps table (Step / Action / Data / Expected result). It is built from `generated_test_cases/<KEY>.csv`, and re-running replaces the section instead of duplicating it.
+- Moves the ticket from **To Do** to **In Review**. If the ticket is in any other status, the status is left alone and the script says so.
+
+If any test fails, do not run this step; report the failures instead.
+
 ## Output to user
 
 1. Ticket key, summary, extracted AC (bullet list)
@@ -107,6 +122,7 @@ Follow project Playwright + POM conventions (`.cursor/skills/playwright-automati
 3. Count of tests (positive / negative / boundary)
 4. Automation files created/updated
 5. How to upload CSV to Xray (Test Repository → Import → CSV with mapped columns above)
+6. Jira update result: coverage added to the description, and the status change (or why it was skipped)
 
 ## Do not
 
