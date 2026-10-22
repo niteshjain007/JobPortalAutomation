@@ -43,6 +43,16 @@ export class JobSeekerProfilePage {
     await expect(this.locationInput).toBeVisible();
   }
 
+  /** Requests /profile without waiting for the form (for redirect checks). */
+  async openProfileUrl() {
+    await this.page.goto('/profile');
+  }
+
+  /** Verifies the profile Location field is not on the current page. */
+  async verifyLocationFieldNotShown() {
+    await expect(this.locationInput).toBeHidden();
+  }
+
   /** Verifies the current URL is the profile page. */
   async verifyProfileUrl() {
     await expect(this.page).toHaveURL(/profile/);
@@ -72,6 +82,11 @@ export class JobSeekerProfilePage {
   /** Verifies the Location field shows the expected city. */
   async verifyCityValue(city: string) {
     await expect(this.locationInput).toHaveValue(city);
+  }
+
+  /** Verifies Location shows the city, allowing leading/trailing spaces (the app stores them as typed). */
+  async verifyCityValueIgnoringSurroundingSpaces(city: string) {
+    await expect(this.locationInput).toHaveValue(new RegExp(`^\\s*${city}\\s*$`));
   }
 
   /** Updates Location to the given city and clicks Save profile. */

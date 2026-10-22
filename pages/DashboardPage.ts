@@ -6,6 +6,7 @@ import { type Locator, type Page, expect } from '@playwright/test';
 export class DashboardPage {
   private readonly page: Page;
   private readonly testerDashboardLabel: Locator;
+  private readonly employerDashboardLabel: Locator;
   private readonly userMenuButton: Locator;
   private readonly editProfileButton: Locator;
   private readonly logoutMenuItem: Locator;
@@ -14,6 +15,8 @@ export class DashboardPage {
     this.page = page;
     // Role banner unique to the authenticated tester dashboard
     this.testerDashboardLabel = page.getByText('TESTER DASHBOARD');
+    // Role banner shown instead for employer accounts
+    this.employerDashboardLabel = page.getByText('EMPLOYER DASHBOARD');
     // Header avatar/name menu used for account actions including logout
     this.userMenuButton = page.getByTestId('user-menu-btn');
     // Primary dashboard CTA confirming the page loaded
@@ -36,6 +39,13 @@ export class DashboardPage {
     await expect(this.testerDashboardLabel).toBeVisible();
     await expect(this.userMenuButton).toBeVisible();
     await expect(this.editProfileButton).toBeVisible();
+  }
+
+  /** Verifies the employer variant of the Dashboard is shown. */
+  async verifyEmployerDashboardOpened() {
+    // Employer sign-in redirects noticeably slower than seeker sign-in
+    await expect(this.page).toHaveURL(/dashboard/, { timeout: 15000 });
+    await expect(this.employerDashboardLabel).toBeVisible();
   }
 
   /** Logs out via the user menu. */

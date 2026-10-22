@@ -10,6 +10,13 @@ export class LoginPage {
   private readonly passwordInput: Locator;
   private readonly signInButton: Locator;
   private readonly invalidCredentialsError: Locator;
+  private readonly demoSeekerButton: Locator;
+  private readonly demoEmployerButton: Locator;
+
+  /** Public sandbox accounts listed in the login page's "Demo accounts" card. */
+  static readonly DEMO_SEEKER_EMAIL = 'demo.seeker@qatestology.com';
+  static readonly DEMO_EMPLOYER_EMAIL = 'demo.employer@qatestology.com';
+  static readonly DEMO_PASSWORD = 'Demo@1234';
 
   constructor(page: Page) {
     this.page = page;
@@ -21,6 +28,9 @@ export class LoginPage {
     this.signInButton = page.getByTestId('login-submit-btn');
     // Error shown after failed login
     this.invalidCredentialsError = page.getByText('Invalid credentials');
+    // "Demo accounts" card buttons that prefill email + password
+    this.demoSeekerButton = page.getByTestId('demo-fill-seeker');
+    this.demoEmployerButton = page.getByTestId('demo-fill-employer');
   }
 
   /** Opens the Login page by clicking Sign in on the home page. */
@@ -42,6 +52,23 @@ export class LoginPage {
     if (password.length > 0) {
       await this.passwordInput.fill(password);
     }
+    await this.signInButton.click();
+  }
+
+  /** Uses the "Job Seeker" demo account button, checks the prefilled email, and signs in. */
+  async loginAsDemoSeeker() {
+    await this.signInWithDemoAccount(this.demoSeekerButton, LoginPage.DEMO_SEEKER_EMAIL);
+  }
+
+  /** Uses the "Employer" demo account button, checks the prefilled email, and signs in. */
+  async loginAsDemoEmployer() {
+    await this.signInWithDemoAccount(this.demoEmployerButton, LoginPage.DEMO_EMPLOYER_EMAIL);
+  }
+
+  private async signInWithDemoAccount(demoButton: Locator, expectedEmail: string) {
+    await demoButton.click();
+    await expect(this.emailInput).toHaveValue(expectedEmail);
+    await expect(this.passwordInput).toHaveValue(LoginPage.DEMO_PASSWORD);
     await this.signInButton.click();
   }
 
