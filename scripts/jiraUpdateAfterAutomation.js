@@ -12,28 +12,11 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { ROOT, getJiraConfig } = require('./env');
 
-const ROOT = path.resolve(__dirname, '..');
 const COVERAGE_HEADING = 'Automated test coverage';
 const FROM_STATUS = 'To Do';
 const TO_STATUS = 'In Review';
-
-function loadEnv() {
-  const envPath = path.join(ROOT, '.env');
-  if (!fs.existsSync(envPath)) throw new Error('.env not found in project root');
-  const env = {};
-  for (const line of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
-    if (!line.trim() || line.trim().startsWith('#') || !line.includes('=')) continue;
-    const idx = line.indexOf('=');
-    env[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
-  }
-  for (const key of ['JIRA_BASE_URL', 'JIRA_EMAIL', 'JIRA_API_TOKEN']) {
-    if (!env[key]) throw new Error(`${key} is missing in .env`);
-  }
-  let base = env.JIRA_BASE_URL.replace(/\/+$/, '');
-  if (!/^https?:\/\//i.test(base)) base = `https://${base}`;
-  return { base, email: env.JIRA_EMAIL, token: env.JIRA_API_TOKEN };
-}
 
 /** Parses CSV text, honouring quoted fields with commas, newlines and "" escapes. */
 function parseCsv(text) {
@@ -202,7 +185,7 @@ async function main() {
     throw new Error('Pass a Jira key, e.g. npm run jira:after-automation -- SCRUM-5');
   }
 
-  const env = loadEnv();
+  const env = getJiraConfig();
   const { csvRelPath, testCases } = readTestCases(key);
   const specFiles = findSpecFiles(key);
   const issue = await jira(env, 'GET', `/rest/api/3/issue/${key}?fields=summary,status,description`);

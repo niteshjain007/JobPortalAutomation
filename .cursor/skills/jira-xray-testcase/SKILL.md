@@ -28,6 +28,8 @@ Read from project `.env` (never print token values):
 - `JIRA_API_TOKEN`
 - `JIRA_PROJECT_KEY`
 
+Each team member uses their own token. If `.env` is missing, `npm run setup` (or `npm run doctor`) creates it from `.env.example`; `npm run doctor` also confirms the credentials work.
+
 ## Workflow
 
 Copy and track:

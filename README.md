@@ -19,13 +19,53 @@ Manual / Xray-ready test cases are stored under `generated_test_cases/`. Cursor 
 
 ---
 
+## Team setup (new machine)
+
+You need **Node.js 20+**, **Git**, **Java 17+** (only for Allure reports) and **Cursor** (for the AI workflow).
+
+```bash
+git clone https://github.com/niteshjain007/JobPortalAutomation.git
+cd JobPortalAutomation
+npm run setup
+```
+
+`npm run setup` installs the dependencies and the Chromium browser, then runs a check that prints `OK` / `WARN` / `FAIL` for Node, dependencies, Chromium, Java and Jira. It also creates your `.env` from `.env.example`.
+
+**Connect Jira (needed for the Jira and AI ticket flow):**
+
+1. Create your own API token at [Atlassian API tokens](https://id.atlassian.com/manage-profile/security/api-tokens). Your Atlassian account needs access to the Jira site.
+2. Open `.env` and set `JIRA_EMAIL` to your Atlassian login and `JIRA_API_TOKEN` to the token. `JIRA_BASE_URL` and `JIRA_PROJECT_KEY` are already filled in.
+3. Run `npm run doctor`. The Jira line should say `signed in as <your name>`.
+
+`.env` is gitignored, so each person keeps their own token and Jira changes are recorded under their own name. Never commit it.
+
+**Check it works:**
+
+```bash
+npm run test:smoke
+```
+
+**Use the AI workflow:** open the project folder in Cursor. The project rules (`.cursor/rules/`) and skills (`.cursor/skills/`) load automatically. Paste a Jira ticket link in Agent chat (for example `https://qatestology.atlassian.net/browse/SCRUM-6`). The agent runs the whole flow:
+- writes the Xray test cases and the Playwright tests, and runs them;
+- updates the Jira ticket;
+- commits and pushes a branch;
+- gives you a pull request link;
+- opens the Allure report.
+
+Cursor may still ask you to approve commands such as `git push`. To skip those prompts, add the commands to the auto-run allowlist in Cursor Settings.
+
+**Get the latest changes:** `git pull`, then `npm run setup` again if `package.json` changed.
+
+---
+
 ## Folder Structure
 
 ```
 JobPortalAutomation/
 ├── .cursor/
 │   ├── rules/
-│   │   └── playwright-project.mdc      # Playwright + POM project conventions
+│   │   ├── playwright-project.mdc      # Playwright + POM project conventions
+│   │   └── jira-ticket-flow.mdc        # Full flow the agent runs for a Jira ticket
 │   └── skills/                         # Cursor Agent skills (slash prompts)
 │       ├── requirement-analysis/
 │       ├── testcase-generation/
@@ -59,12 +99,17 @@ JobPortalAutomation/
 │   └── JobSeekerProfilePageTest.spec.ts
 ├── utils/
 │   └── CommonUtils.ts                  # Wait, screenshot, random number, date
-├── jenkins/                            # Jenkins job config helpers
+├── scripts/
+│   ├── checkSetup.js                   # npm run doctor: machine + Jira check
+│   ├── env.js                          # Reads Jira settings from .env
+│   └── jiraUpdateAfterAutomation.js    # Writes coverage to Jira, To Do -> In Review
+├── jenkins/                            # Local Jenkins job config (machine-specific paths)
 ├── Jenkinsfile
 ├── playwright.config.ts
 ├── tsconfig.json
 ├── package.json
-└── .env                                # Local secrets (gitignored) — Jira, etc.
+├── .env.example                        # Template for .env (committed)
+└── .env                                # Your Jira credentials (gitignored)
 ```
 
 | Folder / file | Purpose |
@@ -76,7 +121,9 @@ JobPortalAutomation/
 | `utils/` | Reusable helpers (`CommonUtils`) |
 | `.cursor/skills/` | Agent skills for QA workflow in Cursor |
 | `.cursor/rules/` | Always-on project conventions for Playwright code |
-| `.env` | Local credentials (Jira API). **Do not commit** |
+| `scripts/` | Setup check and Jira update scripts |
+| `.env.example` | Template for `.env` with the shared Jira site and project |
+| `.env` | Your own Jira credentials. **Do not commit** |
 
 ---
 
@@ -103,18 +150,18 @@ JobPortalAutomation/
 
 ---
 
-## Environment (optional — Jira)
+## Environment (Jira)
 
-Create a local `.env` (already gitignored):
+`npm run setup` creates `.env` from `.env.example`. Fill in your own email and token:
 
 ```env
-JIRA_BASE_URL=https://your-site.atlassian.net
-JIRA_EMAIL=you@example.com
-JIRA_API_TOKEN=your_api_token
-JIRA_PROJECT_KEY=DEV
+JIRA_BASE_URL=https://qatestology.atlassian.net/
+JIRA_EMAIL=your.name@example.com
+JIRA_API_TOKEN=your_own_api_token
+JIRA_PROJECT_KEY=SCRUM
 ```
 
-Used by the **jira-xray-testcase** skill when you paste a Jira story URL.
+Used by the **jira-xray-testcase** skill, the Jira ticket flow rule and `npm run jira:after-automation`. Run `npm run doctor` to confirm the credentials work.
 
 ---
 
@@ -222,6 +269,8 @@ On GitHub Actions, Allure raw results and the generated HTML report are uploaded
 
 | Command | Description |
 |---------|-------------|
+| `npm run setup` | First-time setup: dependencies, Chromium, `.env`, setup check |
+| `npm run doctor` | Check Node, dependencies, Chromium, Java and Jira credentials |
 | `npm install` | Install project dependencies |
 | `npx playwright install chromium` | Download Chromium for Playwright |
 | `npm test` | Run all tests headless |
@@ -235,6 +284,7 @@ On GitHub Actions, Allure raw results and the generated HTML report are uploaded
 | `npx playwright test --debug` | Run tests in Playwright debug mode |
 | `npx playwright test --ui` | Open Playwright UI mode |
 | `npm run report` | Open the last Playwright HTML test report |
+| `npm run allure:clean` | Delete old Allure results before a run |
 | `npm run allure:generate` | Generate Allure HTML report from `allure-results/` |
 | `npm run allure:open` | Open the generated Allure report |
 | `npm run allure:serve` | Generate and serve Allure report in one step |
@@ -314,7 +364,7 @@ Include positive, negative, and boundary cases.
 ```text
 /jira-xray-testcase
 Create Xray CSV test cases and Playwright automation for:
-https://qatestologytest.atlassian.net/browse/DEV-2
+https://qatestology.atlassian.net/browse/SCRUM-6
 ```
 
 CSV is named from the ticket key: `DEV-2` → `generated_test_cases/DEV_2.csv`.
