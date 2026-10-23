@@ -165,6 +165,16 @@ export class JobSeekerProfilePage {
     await expect(this.phoneNumberInput).toHaveValue(phoneNumber);
   }
 
+  /** Returns the current phone number field value. */
+  async getPhoneNumberValue(): Promise<string> {
+    return this.phoneNumberInput.inputValue();
+  }
+
+  /** Verifies the phone number field is not on the current page. */
+  async verifyPhoneFieldNotShown() {
+    await expect(this.phoneNumberInput).toBeHidden();
+  }
+
   /** Reloads the profile page and waits for location and phone fields. */
   async refreshProfilePage() {
     await this.page.reload();
