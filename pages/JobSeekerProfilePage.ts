@@ -1,7 +1,7 @@
 import { type Locator, type Page, expect } from '@playwright/test';
 
 /**
- * Page Object for the Job Seeker Profile page (phone / city updates).
+ * Page Object for the Job Seeker Profile page (phone / city / summary updates).
  */
 export class JobSeekerProfilePage {
   private readonly page: Page;
@@ -9,6 +9,7 @@ export class JobSeekerProfilePage {
   private readonly locationInput: Locator;
   private readonly phoneCountrySelect: Locator;
   private readonly phoneNumberInput: Locator;
+  private readonly summaryInput: Locator;
   private readonly saveProfileButton: Locator;
   private readonly invalidPhoneError: Locator;
   private readonly profileSavedToast: Locator;
@@ -29,6 +30,8 @@ export class JobSeekerProfilePage {
     this.phoneCountrySelect = page.getByTestId('input-phone-country');
     // Phone number field (type=tel)
     this.phoneNumberInput = page.getByTestId('input-phone-number');
+    // About / Summary textarea. It has no accessible name, so the stable test id is used.
+    this.summaryInput = page.getByTestId('input-summary');
     // Persist profile changes
     this.saveProfileButton = page.getByTestId('save-profile-btn');
     // Client-side validation toast for invalid India phone
@@ -165,11 +168,44 @@ export class JobSeekerProfilePage {
     await expect(this.phoneNumberInput).toHaveValue(phoneNumber);
   }
 
-  /** Reloads the profile page and waits for location and phone fields. */
+  /** Clears and enters the About / Summary text. */
+  async enterSummary(summary: string) {
+    await this.summaryInput.fill(summary);
+  }
+
+  /** Returns the current About / Summary value. */
+  async getSummaryValue(): Promise<string> {
+    return this.summaryInput.inputValue();
+  }
+
+  /** Verifies About / Summary shows the expected text, including empty and multiline values. */
+  async verifySummaryValue(summary: string) {
+    await expect(this.summaryInput).toHaveValue(summary);
+  }
+
+  /** Enters About / Summary and clicks Save profile. */
+  async updateSummary(summary: string) {
+    await this.enterSummary(summary);
+    await this.saveProfile();
+  }
+
+  /** Verifies the About / Summary field is not on the current page. */
+  async verifySummaryFieldNotShown() {
+    await expect(this.summaryInput).toBeHidden();
+  }
+
+  /** Reloads the profile page and waits for location, phone, and summary fields. */
   async refreshProfilePage() {
     await this.page.reload();
     await expect(this.locationInput).toBeVisible();
     await expect(this.phoneNumberInput).toBeVisible();
+    await expect(this.summaryInput).toBeVisible();
+  }
+
+  /** After save + refresh, verifies About / Summary is still the saved text. */
+  async verifySummaryPersistedAfterRefresh(summary: string) {
+    await this.refreshProfilePage();
+    await this.verifySummaryValue(summary);
   }
 
   /**
